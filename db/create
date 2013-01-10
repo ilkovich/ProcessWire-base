@@ -16,7 +16,7 @@ ROOTPWD=$3
 if [ -z "$ROOTPWD" ]
 then
     mysql -u$ROOTUSER -e"create database $1" || die "Could not create database"
-    mysql -u$ROOTUSER -e"grant all on $1.* to $1 identified by '$1'" || die "Could not set perms"
+    mysql -u$ROOTUSER -e"grant all on $1.* to '$1'@'localhost' identified by '$1'" || die "Could not set perms"
 else
     mysql -u$ROOTUSER -p$ROOTPWD -e"create database $1" || die "Could not create database"
     mysql -u$ROOTUSER -p$ROOTPWD -e"grant all on $1.* to $1 identified by '$1'" || die "Could not set perms"
