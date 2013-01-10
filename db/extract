@@ -1,0 +1,5 @@
+#!/bin/sh
+DBUSER=<user>
+DBPWD=<password>
+DB=<db>
+mysqldump -u$DBUSER -p$DBPWD $DB | gzip -c -> $DB-$(date +%Y-%m-%d-%H.%M.%S)-$USER.sql.gz

@@ -1,0 +1,32 @@
+#columnWidth {
+	float: left; 
+	margin-right: 1em; 
+	margin-bottom: 1em; 
+}
+
+#columnWidthSlider {
+	float: left;
+	width: 70%; 
+	position: relative;
+	top: 3px; 
+}
+
+#wrap_columnWidth p.notes {
+	clear: both; 
+}
+
+#fieldgroupContext {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+body.modal #fieldgroupContext {
+	position: absolute;
+	top: -9999px;
+	right: 0;
+}
+
+#modal_cancel_button {
+	display: none; 
+}
+

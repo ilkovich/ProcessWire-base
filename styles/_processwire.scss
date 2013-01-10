@@ -1,0 +1,14 @@
+#editpage {
+    position: absolute;
+    top: 0;
+    left: 0; 
+    padding: 5px 6px; 
+    background: #c3325f;
+    color: #fff; 
+    display: block;
+    font-weight: bold; 
+    &:hover {
+        background: #ffffcc;
+        color: #000; 
+    }
+}

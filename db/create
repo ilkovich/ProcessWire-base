@@ -1,0 +1,28 @@
+#!/bin/sh
+die () {
+    echo >&2 "$@"
+    exit 1
+}
+[ "$#" -gt 1 ] || die "Usage: create <db> <root_user> <root_pwd>"
+echo $1 | grep -E -q '^[0-9a-zA-Z_]+$' || die "invalid db name"
+
+USER=$1
+PWD=$1
+DB=$1
+
+ROOTUSER=$2
+ROOTPWD=$3
+
+if [ -z "$ROOTPWD" ]
+then
+    mysql -u$ROOTUSER -e"create database $1" || die "Could not create database"
+    mysql -u$ROOTUSER -e"grant all on $1.* to $1 identified by '$1'" || die "Could not set perms"
+else
+    mysql -u$ROOTUSER -p$ROOTPWD -e"create database $1" || die "Could not create database"
+    mysql -u$ROOTUSER -p$ROOTPWD -e"grant all on $1.* to $1 identified by '$1'" || die "Could not set perms"
+fi
+
+sed -e "s/<user>/$1/g" -i "" ./extract ./restore
+sed -e "s/<password>/$1/g" -i "" ./extract ./restore
+sed -e "s/<db>/$1/g" -i "" ./extract ./restore
+echo "Success!"

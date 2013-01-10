@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * An Inputfield for handling E-Mail addresses
+ *
+ */
+class InputfieldEmail extends InputfieldText {
+
+	public static function getModuleInfo() {
+		return array(
+			'title' => __('Email', __FILE__), // Module Title
+			'version' => 100,
+			'summary' => __('E-Mail address in valid format', __FILE__) // Module Summary
+			);
+	}
+
+	public function __construct() {
+		parent::__construct();
+		$this->setAttribute('type', 'email'); 
+		$this->setAttribute('maxlength', 512); 
+		//$this->setAttribute('size', 70); 
+		$this->setAttribute('name', 'email'); 
+	}
+
+	public function ___render() {
+		if(!$this->label || $this->label == $this->name) $this->label = $this->_('E-Mail'); // label headline when no default specified
+		//if(!$this->description) $this->description = $this->_("Enter a valid e-mail address, i.e. person@company.com"); // Instruction and example of valid email address
+		return parent::___render();
+	}
+
+	protected function setAttributeValue($value) {
+		if(strlen($value)) { 
+			$value = $this->fuel('sanitizer')->email($value); 	
+			if(!$value) $this->error($this->_("Please enter a valid e-mail address")); // Error message when email address is invalid
+		}
+		return $value; 
+	}
+
+}

@@ -1,0 +1,15 @@
+#!/bin/sh
+DBUSER=<user>
+DBPWD=<password>
+DB=<db>
+
+die () {
+    echo >&2 "$@"
+    exit 1
+}
+[ "$#" -eq 1 ] || die "Usage: restore <filename>"
+echo $1 | grep -E -q 'gz$' || die "filename must have extension .gz"
+
+mysql -u$DBUSER -p$DBPWD -e"drop database $DB;" 
+mysql -u$DBUSER -p$DBPWD -e"create database $DB;"
+gunzip -c $1 | mysql -u$DBUSER -p$DBPWD $DB
