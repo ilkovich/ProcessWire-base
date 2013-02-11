@@ -16,4 +16,4 @@ sess_*
 .htaccess
 tmp
 upgrade.php
-site/assets
+/webroot/site/assets
