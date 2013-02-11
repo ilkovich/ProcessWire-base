@@ -106,7 +106,8 @@ abstract class Selector extends WireData {
 
 		foreach($values as $v) {
 
-			if($v instanceof Wire) $v = $v->$field; 
+			if($v instanceof WireData) $v = $v->get($field);
+				else if($v instanceof Wire) $v = $v->$field; 
 
 			/* FUTURE/TODO
 			// Check if $v contains another selector expression within it, and treat it as an OR if it does
@@ -128,7 +129,7 @@ abstract class Selector extends WireData {
 			}
 		}
 
-		return $this->evaluate($matches); 
+		return $matches; 
 	}
 
 	/**
@@ -255,7 +256,7 @@ class SelectorContainsWords extends Selector {
 	protected function match($value1, $value2) { 
 		$hasAll = true; 
 		$words = preg_split('/[-\s]/', $value2, -1, PREG_SPLIT_NO_EMPTY);
-		foreach($words as $key => $word) if(!preg_match('/\b' . preg_quote($word) . '\b/i')) {
+		foreach($words as $key => $word) if(!preg_match('/\b' . preg_quote($word) . '\b/i', $value1)) {
 			$hasAll = false;
 			break;
 		}

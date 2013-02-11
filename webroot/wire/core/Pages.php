@@ -359,6 +359,12 @@ class Pages extends Wire {
 		// if page is already loaded, then get the path from it
 		if(isset($this->pageIdCache[$id])) return $this->pageIdCache[$id]->path();
 
+		if($this->modules->isInstalled('PagePaths')) {
+			$path = $this->modules->get('PagePaths')->getPath($id);
+			if(is_null($path)) $path = '';
+			return $path; 
+		}
+
 		$path = '';
 		$parent_id = $id; 
 		do {
@@ -491,7 +497,7 @@ class Pages extends Wire {
 	 * If you want to just save a particular field in a Page, use $page->save($fieldName) instead. 
 	 *
 	 * @param Page $page
-	 * @return bool True on success
+	 * @return bool True on success, false on failure
 	 *
 	 */
 	public function ___save(Page $page, $options = array()) {
@@ -562,7 +568,7 @@ class Pages extends Wire {
 
 		// save each individual Fieldtype data in the fields_* tables
 		foreach($page->fieldgroup as $field) {
-			$field->type->savePageField($page, $field);
+			if($field->type) $field->type->savePageField($page, $field);
 		}
 
 		// return outputFormatting state
@@ -614,16 +620,16 @@ class Pages extends Wire {
 			$this->saveParents($page->parentPrevious->id, 0); 
 		}
 
-
 		// trigger hooks
-
+		$this->saved($page);
 		if($triggerAddedPage) $this->added($triggerAddedPage);
 		if($page->namePrevious && $page->namePrevious != $page->name) $this->renamed($page); 
 		if($page->parentPrevious) $this->moved($page);
 		if($page->templatePrevious) $this->templateChanged($page);
 
-		$this->debugLog('save', $page, $result != false); 
-		return $result; 
+		$this->debugLog('save', $page, true); 
+
+		return true; 
 	}
 
 	/**
@@ -1138,6 +1144,15 @@ class Pages extends Wire {
 		foreach($this->debugLog as $item) if($item['action'] == $action) $debugLog[] = $item; 
 		return $debugLog; 
 	}
+
+	/**
+	 * Hook called after a page is successfully saved
+	 *
+	 * This is the same as Pages::save, except that it occurs before other save-related hooks (below),
+	 * Whereas Pages::save occurs after. In most cases, the distinction does not matter. 
+	 *
+	 */
+	protected function ___saved(Page $page) { }
 
 	/**
 	 * Hook called when a new page has been added

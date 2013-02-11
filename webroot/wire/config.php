@@ -71,3 +71,66 @@ $config->dateFormat = 'Y-m-d H:i:s';
  */
 $config->protectCSRF = true;
 
+/**
+ * pagefileUrlPrefix: String that prefixes filenames in PW URLs, becoming a shortcut to a page's file's URL
+ *
+ * This must be at the end of the URL. For the prefix "-/", a files URL would look like this:
+ * /path/to/page/-/filename.jpg => same as: /site/assets/files/123/filename.jpg
+ *
+ * This should be a prefix that is not the same as any page name, as it takes precedence.
+ *
+ * This prefix is deprecated. Insert this into your /site/config.php as a temporary fix only if you
+ * have broken images from <img> tags placed in textarea fields.
+ *
+ * @deprecated
+ *
+$config->pagefileUrlPrefix = '-/'; 
+ */
+
+/**
+ * pagefileSecurePathPrefix: One or more characters prefixed to the pathname of secured file dirs.
+ *
+ * This should be some prefix that the .htaccess file knows to block requests for. This is typically
+ * overridden as '-' in /site/config.php, but kept as '.' in this file for fallback/backwards 
+ * compatibility with pre 2.3 htaccess files. 
+ *
+ */
+$config->pagefileSecurePathPrefix = '.';
+
+/**
+ * fileContentTypes: array of extention to content-type header, used by file passthru functions.
+ *
+ * Any content types that should be force-download should be preceded with a plus sign.
+ * The '?' index must be present to represent a default for all not present.
+ *
+ */
+$config->fileContentTypes = array(
+	'?' => '+application/octet-stream',
+	'pdf' => '+application/pdf',
+	'doc' => '+application/msword',
+	'docx' => '+application/msword',
+	'xls' => '+application/excel',
+	'xlsx' => '+application/excel',
+	'rtf' => '+application/rtf',
+	'gif' => 'image/gif',
+	'jpg' => 'image/jpeg',
+	'jpeg' => 'image/jpeg',
+	'png' => 'image/x-png',
+	);
+
+/** 
+ * chmodDir: octal string permissions assigned to directories created by ProcessWire
+ *
+ * This is overwritten at runtime with a more specific value in /site/config.php
+ *
+ */
+$config->chmodDir = "0777";
+
+/**
+ * chmodFile: octal string permissions assigned to files created by ProcessWire
+ * 
+ * This is overwritten at runtime with a more specific value in /site/config.php
+ *
+ */
+$config->chmodFile = "0666";    
+
